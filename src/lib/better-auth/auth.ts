@@ -1,23 +1,15 @@
-import { db } from "@/database/db";
-import { account } from "@/database/schemas/account";
-import { session } from "@/database/schemas/session";
-import { user } from "@/database/schemas/user";
-import { verification } from "@/database/schemas/verification";
 import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-
+import { v4 as uuidv4 } from "uuid";
+import { Pool } from "pg";
+import { DataTypes } from "sequelize";
 export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "pg",
-    camelCase: true,
-    usePlural: false,
-    debugLogs: false,
-    schema: {
-      user: user,
-      account: account,
-      session: session,
-      verification: verification,
-    },
+  database: new Pool({
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || "5432", 10),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    ssl: false,
   }),
 
   emailAndPassword: {
@@ -32,6 +24,9 @@ export const auth = betterAuth({
   advanced: {
     cookiePrefix: "product-in-bio",
     useSecureCookies: true, // Use secure cookies in both production and development. If false, cookies will not be secure in development, just production.
+    database: {
+      generateId: () => uuidv4(),
+    },
   },
 
   user: {

@@ -1,8 +1,7 @@
-import { languageEnum } from "@/database/schemas/user";
+import { LanguageTypes as LT } from "@/database/models/user";
 import { betterAuthClient } from "../auth-client";
 
-export type LanguageTypes = keyof typeof languageEnum.enumValues;
-
+export type LanguageTypes = keyof typeof LT;
 export type ErrorTypes = Partial<
   Record<
     keyof typeof betterAuthClient.$ERROR_CODES,

@@ -13,41 +13,66 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { toast } from "sonner";
+import { useState } from "react";
+import { APIError } from "better-auth";
+import { getErrorMessage } from "@/lib/better-auth/error-handling";
 
-const RegisterSchenma = z4.object({
-  name: z4.string().min(1, "Name is required"),
-  email: z4.email("Invalid email address"),
-  password: z4.string().min(8, "Password must be at least 8 characters long"),
-});
+const RegisterSchema = z4
+  .object({
+    name: z4.string().min(1, "Full name is required"),
+    email: z4.email("Invalid email address"),
+    password: z4.string().min(8, "Password must be at least 8 characters long"),
+    confirmPassword: z4.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 type SignUpFormProps = {
-  signUpHandler?: (e: React.FormEvent<HTMLFormElement>) => void;
   createAccountHandler?: () => void;
 };
 export default function SignUpForm(props: SignUpFormProps) {
-  const formHook = useForm<z4.infer<typeof RegisterSchenma>>({
-    resolver: zodResolver(RegisterSchenma),
+  const [loading, setLoading] = useState(false);
+
+  const formHook = useForm<z4.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
     mode: "onChange",
   });
 
-  const signUpHandler = () => {
-    betterAuthClient.signUp.email({
-      email: "",
-      name: "",
-      password: "",
-      callbackURL: "/",
-      image: "",
-      lang: "",
-      fetchOptions: {
-        onSuccess(context) {},
-        onError(context) {},
-      },
-    });
+  const signUpHandler = (values: z4.infer<typeof RegisterSchema>) => {
+    setLoading(true);
+    betterAuthClient.signUp
+      .email({
+        email: values.email,
+        password: values.password,
+        name: values.name,
+        image: "",
+        lang: "EN",
+        fetchOptions: {
+          onSuccess(context) {
+            toast.success("Account created successfully!");
+            props.createAccountHandler?.();
+          },
+          onError(context) {
+            if (context.error.error?.code) {
+              toast.error(getErrorMessage(context.error.error?.code));
+            } else {
+              toast.error(context.error.error);
+            }
+          },
+        },
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -60,7 +85,11 @@ export default function SignUpForm(props: SignUpFormProps) {
         </p>
       </div>
       <Form {...formHook}>
-        <form noValidate onSubmit={props.signUpHandler}>
+        <form
+          className="flex flex-col gap-3"
+          noValidate
+          onSubmit={formHook.handleSubmit(signUpHandler)}
+        >
           <div className="flex flex-col gap-3">
             <FormField
               control={formHook.control}
@@ -69,7 +98,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                 return (
                   <FormItem>
                     <FormLabel>
-                      <span className="text-red-500">*</span>Name
+                      <span className="text-red-500">*</span>Full Name
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -113,13 +142,13 @@ export default function SignUpForm(props: SignUpFormProps) {
                 return (
                   <FormItem>
                     <FormLabel>
-                      <span className="text-red-500">*</span>Email
+                      <span className="text-red-500">*</span>Password
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         autoComplete="new-password"
-                        placeholder="****"
+                        placeholder="********"
                         {...field}
                       />
                     </FormControl>
@@ -128,21 +157,28 @@ export default function SignUpForm(props: SignUpFormProps) {
                 );
               }}
             />
-            <div className="grid gap-3">
-              <div className="flex items-center">
-                <Label htmlFor="password">
-                  <span className="text-red-500">*</span>Password
-                </Label>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                name="password"
-                autoComplete="current-password"
-                placeholder="********"
-                required
-              />
-            </div>
+            <FormField
+              control={formHook.control}
+              name="confirmPassword"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>
+                      <span className="text-red-500">*</span>Re-type Password
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        autoComplete="new-password"
+                        placeholder="********"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
           </div>
 
           <Button type="submit" className="w-full">
