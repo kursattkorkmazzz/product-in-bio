@@ -53,11 +53,8 @@ export default function SignInForm(props: SignInFormProps) {
         },
         onError(context) {
           setLoading(false);
-          if (context.error.code) {
-            toast.error(getErrorMessage(context.error.code));
-          } else {
-            toast.error(context.error.message);
-          }
+
+          toast.error(getErrorMessage(context.error.code));
         },
       },
     });

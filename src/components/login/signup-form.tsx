@@ -64,11 +64,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             props.createAccountHandler?.();
           },
           onError(context) {
-            if (context.error.code) {
-              toast.error(getErrorMessage(context.error.code));
-            } else {
-              toast.error(context.error.message);
-            }
+            toast.error(getErrorMessage(context.error.code));
             setLoading(false);
           },
         },

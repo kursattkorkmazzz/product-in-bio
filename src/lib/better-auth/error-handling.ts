@@ -1,3 +1,4 @@
+import { BetterFetchError } from "better-auth/react";
 import { ErrorTypes, LanguageTypes } from "./types/error-types";
 
 const errorCodes = {
@@ -75,9 +76,13 @@ const errorCodes = {
   },
 } satisfies ErrorTypes;
 
-export const getErrorMessage = (code: string, lang: LanguageTypes = "en") => {
-  if (code in errorCodes) {
-    return errorCodes[code as keyof typeof errorCodes][lang];
+export const getErrorMessage = (
+  error: BetterFetchError & Record<string, any>,
+  lang: LanguageTypes = "en"
+) => {
+  if (error.code in errorCodes) {
+    return errorCodes[error.code as keyof typeof errorCodes][lang];
   }
-  return "";
+  //TODO: Log error details to solve.
+  return "An unexpected error occurred. Please try again later.";
 };
