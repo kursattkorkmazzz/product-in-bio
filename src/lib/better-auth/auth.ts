@@ -25,23 +25,12 @@ export const auth = betterAuth({
     minPasswordLength: 8,
     maxPasswordLength: 64,
     autoSignIn: true,
-    requireEmailVerification: true,
+    requireEmailVerification: false,
     revokeSessionsOnPasswordReset: true,
     resetPasswordTokenExpiresIn: 300, // 5 minutes
   },
   advanced: {
     cookiePrefix: "product-in-bio",
     useSecureCookies: true, // Use secure cookies in both production and development. If false, cookies will not be secure in development, just production.
-  },
-
-  user: {
-    additionalFields: {
-      lang: {
-        type: "string",
-        defaultValue: "en",
-        fieldName: "lang",
-        required: true,
-      },
-    },
   },
 });

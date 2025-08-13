@@ -1,7 +1,5 @@
 import { pgTable, text, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core";
 
-export const languageEnum = pgEnum("language", ["en"]);
-
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -10,9 +8,6 @@ export const user = pgTable("user", {
     .$defaultFn(() => false)
     .notNull(),
   image: text("image"),
-  lang: languageEnum()
-    .$default(() => "en")
-    .notNull(),
   createdAt: timestamp("createdAt")
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),

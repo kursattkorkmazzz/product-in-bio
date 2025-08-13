@@ -8,7 +8,7 @@ export default defineConfig({
     database: "product-in-bio",
     host: "localhost",
     port: 5432,
-    password: "adminkursat",
+    password: "admin",
     user: "postgres",
     ssl: false,
   },

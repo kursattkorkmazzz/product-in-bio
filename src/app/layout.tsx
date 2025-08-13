@@ -21,7 +21,11 @@ export default function RootLayout({
           themes={["light", "dark"]}
         >
           {children}
-          <Toaster />
+          <Toaster
+            position="bottom-center"
+            closeButton={true}
+            richColors={true}
+          />
         </ThemeProvider>
       </body>
     </html>
