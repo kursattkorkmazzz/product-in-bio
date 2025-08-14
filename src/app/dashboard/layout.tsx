@@ -1,15 +1,53 @@
+"use client";
 import AppSidebar from "@/components/sidebar/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { betterAuthClient } from "@/lib/better-auth/auth-client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+  const { data: session, isPending, error } = betterAuthClient.useSession();
+
+  useEffect(() => {
+    if (!isPending) {
+      if (!session) {
+        console.log("No session found, redirecting to login");
+        router.push("/login");
+      } else {
+        console.log("Session found:", session);
+      }
+    }
+  }, [session, isPending, router]);
+
+  useEffect(() => {
+    if (error) {
+      console.error("Session error:", error);
+    }
+  }, [error]);
+
+  // Session yüklenene kadar loading göster
+  if (isPending) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+  // Session yoksa hiçbir şey render etme (redirect edilecek)
+  if (!session) {
+    return null;
+  }
+
   return (
     <SidebarProvider className="bg-sidebar h-full">
       <AppSidebar />

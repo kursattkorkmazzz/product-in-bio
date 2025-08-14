@@ -31,6 +31,7 @@ export const auth = betterAuth({
   },
   advanced: {
     cookiePrefix: "product-in-bio",
-    useSecureCookies: true, // Use secure cookies in both production and development. If false, cookies will not be secure in development, just production.
+    useSecureCookies: process.env.NODE_ENV === "production",
   },
+  trustedOrigins: ["http://localhost:3002"], // Geliştirme ortamı için
 });

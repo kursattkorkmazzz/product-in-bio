@@ -83,6 +83,7 @@ export const getErrorMessage = (
   if (error.code in errorCodes) {
     return errorCodes[error.code as keyof typeof errorCodes][lang];
   }
+  console.log(error);
   //TODO: Log error details to solve.
   return "An unexpected error occurred. Please try again later.";
 };

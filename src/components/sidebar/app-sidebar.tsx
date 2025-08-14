@@ -17,10 +17,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarRail,
 } from "../ui/sidebar";
 import { SidebarMenuData } from "./sidebar-menu-data";
-import SidebarOrganizationSwitcher from "./sidebar-organization-switcher";
+import ProfileMenu from "./profile-menu";
 
 export default function AppSidebar() {
   return (
@@ -32,8 +31,6 @@ export default function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarOrganizationSwitcher />
-
         {Object.entries(SidebarMenuData).map(([group_name, items], i) => {
           return (
             <Collapsible
@@ -95,7 +92,9 @@ export default function AppSidebar() {
           );
         })}
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <ProfileMenu />
+      </SidebarFooter>
     </Sidebar>
   );
 }

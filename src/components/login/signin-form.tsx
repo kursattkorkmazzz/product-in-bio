@@ -1,3 +1,4 @@
+"use client";
 import z4 from "zod/v4";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -28,7 +29,6 @@ type SignInFormProps = {
 };
 export default function SignInForm(props: SignInFormProps) {
   const [loading, setLoading] = useState<boolean>(false);
-
   const formHook = useForm<z4.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
@@ -49,12 +49,12 @@ export default function SignInForm(props: SignInFormProps) {
       fetchOptions: {
         onSuccess(context) {
           setLoading(false);
+          console.log(context.data);
           toast.success("Signed in successfully! Redirecting...");
         },
         onError(context) {
           setLoading(false);
-
-          toast.error(getErrorMessage(context.error.code));
+          toast.error(getErrorMessage(context.error));
         },
       },
     });
