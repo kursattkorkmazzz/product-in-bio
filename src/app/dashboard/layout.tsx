@@ -20,10 +20,7 @@ export default function DashboardLayout({
   useEffect(() => {
     if (!isPending) {
       if (!session) {
-        console.log("No session found, redirecting to login");
         router.push("/login");
-      } else {
-        console.log("Session found:", session);
       }
     }
   }, [session, isPending, router]);

@@ -49,7 +49,6 @@ export default function SignInForm(props: SignInFormProps) {
       fetchOptions: {
         onSuccess(context) {
           setLoading(false);
-          console.log(context.data);
           toast.success("Signed in successfully! Redirecting...");
         },
         onError(context) {

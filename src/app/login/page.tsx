@@ -7,6 +7,7 @@ import { betterAuthClient } from "@/lib/better-auth/auth-client";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function AuthenticationPage() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -18,6 +19,7 @@ export default function AuthenticationPage() {
     setIsLoading(currentSession.isPending);
     if (currentSession.data) {
       router.push("/dashboard");
+      toast.success("You are already signed in! Redirecting to dashboard...");
     }
   }, [currentSession]);
 

@@ -33,5 +33,5 @@ export const auth = betterAuth({
     cookiePrefix: "product-in-bio",
     useSecureCookies: process.env.NODE_ENV === "production",
   },
-  trustedOrigins: ["http://localhost:3002"], // Geliştirme ortamı için
+  trustedOrigins: [process.env.FRONTEND_URL || ""], // Geliştirme ortamı için
 });

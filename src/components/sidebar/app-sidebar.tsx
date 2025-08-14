@@ -19,7 +19,7 @@ import {
   SidebarMenuSub,
 } from "../ui/sidebar";
 import { SidebarMenuData } from "./sidebar-menu-data";
-import ProfileMenu from "./profile-menu";
+import SidebarUser from "./sidebar-user";
 
 export default function AppSidebar() {
   return (
@@ -93,7 +93,7 @@ export default function AppSidebar() {
         })}
       </SidebarContent>
       <SidebarFooter>
-        <ProfileMenu />
+        <SidebarUser />
       </SidebarFooter>
     </Sidebar>
   );
