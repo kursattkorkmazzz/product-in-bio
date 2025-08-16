@@ -15,7 +15,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
-
+import { HTMLMotionProps, motion } from "motion/react";
 const Form = FormProvider;
 
 type FormFieldContextValue<
@@ -136,23 +136,24 @@ function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
-function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
+function FormMessage({ className, ...props }: HTMLMotionProps<"p">) {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message ?? "") : props.children;
-
-  if (!body) {
-    return null;
-  }
-
   return (
-    <p
+    <motion.p
       data-slot="form-message"
+      animate={{
+        height: body ? "auto" : 0,
+      }}
       id={formMessageId}
-      className={cn("text-destructive text-sm", className)}
+      className={cn(
+        "overflow-hidden text-destructive text-sm min-h-0",
+        className
+      )}
       {...props}
     >
       {body}
-    </p>
+    </motion.p>
   );
 }
 

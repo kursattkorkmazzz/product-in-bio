@@ -1,5 +1,6 @@
 "use client";
 import AppSidebar from "@/components/sidebar/app-sidebar";
+import Loading from "@/components/ui/loading";
 import {
   SidebarInset,
   SidebarProvider,
@@ -35,7 +36,7 @@ export default function DashboardLayout({
   if (isPending) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div>Loading...</div>
+        <Loading size={28} />
       </div>
     );
   }

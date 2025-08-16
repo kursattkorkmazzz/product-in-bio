@@ -80,10 +80,22 @@ export const getErrorMessage = (
   error: BetterFetchError & Record<string, any>,
   lang: LanguageTypes = "en"
 ) => {
-  if (error.code in errorCodes) {
-    return errorCodes[error.code as keyof typeof errorCodes][lang];
+  return getErrorMessageFromCode(error.code, lang);
+};
+
+export const getErrorMessageFromCode = (
+  code: string | undefined,
+  lang: LanguageTypes = "en"
+) => {
+  if (!code) {
+    console.log("Undefined error code:", code);
+
+    return "An unexpected error occurred. Please try again later.";
   }
-  console.log(error);
+  if (code in errorCodes) {
+    return errorCodes[code as keyof typeof errorCodes][lang];
+  }
+  console.log(code);
   //TODO: Log error details to solve.
   return "An unexpected error occurred. Please try again later.";
 };
