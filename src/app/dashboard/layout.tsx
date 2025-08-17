@@ -1,4 +1,5 @@
 "use client";
+import DashboardHeader from "@/components/header/dashboard-header";
 import AppSidebar from "@/components/sidebar/app-sidebar";
 import Loading from "@/components/ui/loading";
 import {
@@ -16,7 +17,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { data: session, isPending, error } = betterAuthClient.useSession();
+  const { data: session, isPending } = betterAuthClient.useSession();
 
   useEffect(() => {
     if (!isPending) {
@@ -25,12 +26,6 @@ export default function DashboardLayout({
       }
     }
   }, [session, isPending, router]);
-
-  useEffect(() => {
-    if (error) {
-      console.error("Session error:", error);
-    }
-  }, [error]);
 
   // Session yüklenene kadar loading göster
   if (isPending) {
@@ -49,8 +44,8 @@ export default function DashboardLayout({
   return (
     <SidebarProvider className="bg-sidebar h-full">
       <AppSidebar />
-      <SidebarInset className="m-3 rounded-xl bg-background">
-        <SidebarTrigger />
+      <SidebarInset className="flex flex-col m-3 rounded-xl bg-background">
+        <DashboardHeader />
         {children}
       </SidebarInset>
     </SidebarProvider>

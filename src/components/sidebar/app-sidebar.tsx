@@ -1,3 +1,4 @@
+"use client";
 import { ChevronRight } from "lucide-react";
 import {
   Collapsible,
@@ -20,8 +21,11 @@ import {
 } from "../ui/sidebar";
 import { SidebarMenuData } from "./sidebar-menu-data";
 import SidebarUser from "./sidebar-user";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function AppSidebar() {
+  const router = useRouter();
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
@@ -45,16 +49,26 @@ export default function AppSidebar() {
                 >
                   <CollapsibleTrigger>
                     {group_name}
-                    <ChevronRight className="ml-auto transition-transform group-data-[state=open]/sidebar-collapsible:rotate-90" />
+                    <ChevronRight className="ml-auto transition-transform group-data-[state=open]/sidebar-collapsible:rotate-90 cursor-pointer" />
                   </CollapsibleTrigger>
                 </SidebarGroupLabel>
 
                 <CollapsibleContent>
                   <SidebarGroupContent>
-                    {items.map((item) => (
-                      <SidebarMenu>
+                    {items.map((item, i) => (
+                      <SidebarMenu key={item.id + i}>
                         <SidebarMenuItem key={item.label}>
-                          <SidebarMenuButton>
+                          <SidebarMenuButton
+                            className={cn(
+                              item.sidebarMenuItems &&
+                                item.sidebarMenuItems.length > 0
+                                ? ""
+                                : "cursor-pointer"
+                            )}
+                            onClick={() => {
+                              if (item.href) router.push(item.href);
+                            }}
+                          >
                             {item.icon && <item.icon className="mr-2" />}
                             {item.label}
                           </SidebarMenuButton>
